@@ -9,16 +9,16 @@ public class Battleship {
 		
 	}
 	
-	public static Position[][] board = new Position[8][8];
-	public static char[][] printBoard = new char[8][8];
+	private Position[][] board = new Position[8][8];
+	private char[][] printBoard = new char[8][8];
 	
 	
 	// Overloading here
-	public static boolean isAvailable(int x, int y)
+	public boolean isAvailable(int x, int y)
 	{
 		return board[x][y]==null;
 	}
-	public static boolean isAvailable(String coordinate)
+	public boolean isAvailable(String coordinate)
 	{
 		int x=0,y=0;
 		
