@@ -9,7 +9,7 @@ public class Position {
 	private String owner;
 	
 	
-	public Position(String owner, String coordinate)
+	public Position(String owner, String coordinate) // constructor
 	{
 		called=false;
 		this.owner=owner;
@@ -36,7 +36,7 @@ public class Position {
 		case '8' : x=7;break;
 		}
 	}
-	public Position(String owner, int y , int x)
+	public Position(String owner, int x , int y) // constructor
 	{
 		this.owner=owner;
 		this.x=x;
