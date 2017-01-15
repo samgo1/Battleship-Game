@@ -20,11 +20,7 @@ public class Battleship {
 		printGrid = new char[8][8];
 		
 	}
-	public Battleship(int size) // constructor to create a custom grid 
-	{
-		grid = new Position[size][size];
-		printGrid = new char[size][size];
-	}
+	
 	/////////////////////////////////////////////////////////////////
 	
 	// My isAvailable methods
@@ -134,17 +130,15 @@ public class Battleship {
 		{
 			System.out.println("Your turn");
 			placeRocket(p1, scan);
-			missedTurn(p1,p2);
 			display();
 			System.out.println("Computer's turn");
 			placeRocket(p2, scan);
-			missedTurn(p2,p1);
 			display();
 		}
 		if (p1.getShips()==0)
-			System.out.println("The winner is "+ p1.getName());
+			System.out.println("The winner is "+ p2.getName());
 		else
-			System.out.println("The winner is " + p2.getName());
+			System.out.println("The winner is " + p1.getName());
 		System.out.println("Number of missed turns for " + p1.getName() + " = " + p1.getMissedTurns());
 		System.out.println("Number of missed turns for " + p2.getName() + " = " + p2.getMissedTurns());
 		display();
@@ -237,9 +231,9 @@ public class Battleship {
 			{
 				System.out.println("Enter the coordinate of your grenade #" + (i+1) + ": ");
 				String coordinate = sc.nextLine();
-				if (isWithin(coordinate)==true)
+				if (isWithin(coordinate))
 				{
-					if (isAvailable(coordinate)==true) 
+					if (isAvailable(coordinate)) 
 					{
 						Position x = new Position(p.getName(), coordinate);
 						x.setGrenade();
@@ -267,13 +261,23 @@ public class Battleship {
 		for (int i=0; i<8; i++)
 		{
 			System.out.println("");
+			if (i==0)
+			{
+				System.out.print(" ");
+				for (int k=0; k<8;k++)
+				{
+					System.out.print((char)(k+65)+ " ");
+				}
+				System.out.println("");
+			}
+			System.out.print(i+1);
 			for (int j=0; j<8; j++)
 			{
-				if (grid[i][j].isCalled()==true) // if the position is called
+				if (grid[i][j].isCalled()) // if the position is called
 				{
 					if (grid[i][j].getOwner().equals("Computer"))
 					{
-						if (grid[i][j].getShip()==true)
+						if (grid[i][j].getShip())
 						{
 							printGrid[i][j]='S';
 		
@@ -289,7 +293,7 @@ public class Battleship {
 					}
 					else // if it is human player
 					{
-						if (grid[i][j].getShip()==true)
+						if (grid[i][j].getShip())
 						{
 							printGrid[i][j]='s';
 						}
@@ -321,47 +325,68 @@ public class Battleship {
 				y=(int)(Math.random()*8);
 			}
 			while (grid[x][y].getOwner().equals("Computer")); // loops until he finds a position that is not his
-			if (grid[x][y].getShip()==true) // then it belongs to the other player
+			System.out.println("The computer chose position: "+ (char)(y+65)+""+(char)(x+49));
+			if (grid[x][y].getShip()) // then it belongs to the other player
 			{
-				p1.removeShips();
-				grid[x][y].setCalled();
+				if (!grid[x][y].isCalled())
+				{
+					p1.removeShips();
+					grid[x][y].setCalled();
+				}
+				
 			}
-			else if(grid[x][y].getGrenade()==true) // then it still belongs to the other player
+			else if(grid[x][y].getGrenade()) // then it still belongs to the other player
 			{
-				p1.removeGrenade();
-				grid[x][y].setCalled();
-				p.addMissedTurn();
+				if (!grid[x][y].isCalled())
+				{
+					System.out.println("Computer hit a grenade!");
+					p1.removeGrenade();
+					grid[x][y].setCalled();
+					p.addMissedTurn();
+					display();
+					placeRocket(p1,scan);
+				}
 				
 			}
 			else // nobody owns this position
 			{
 				grid[x][y].setCalled();
 			}
-			System.out.println("The computer chose position: "+ (char)(x+65)+""+(char)(y+49));
+			
 			
 			
 		}
 		else // human player place his rocket
 		{
 			System.out.println("Where do you want to position your rocket?:");
-			String coordinate = sc.next();
-			if (isWithin(coordinate)==true)
+			String coordinate = sc.nextLine();
+			if (isWithin(coordinate))
 			{
 				Position temp = new Position(p1.getName(), coordinate); // temporary created object just to get row and column for the coordinate entered
 				if (grid[temp.getRow()][temp.getColumn()].getOwner().equals(p2.getName())) // the position belongs to the computer
 				{
-					if (grid[temp.getRow()][temp.getColumn()].getShip()==true)
+					if (grid[temp.getRow()][temp.getColumn()].getShip())
 					{
-						System.out.println("Ship hit!");
-						p2.removeShips();
-						grid[temp.getRow()][temp.getColumn()].setCalled();
+						if (!grid[temp.getRow()][temp.getColumn()].isCalled())
+						{
+							System.out.println("Ship hit!");
+							p2.removeShips();
+							grid[temp.getRow()][temp.getColumn()].setCalled();
+						}
+						
 					}
-					else if (grid[temp.getRow()][temp.getColumn()].getGrenade()==true)
+					else 
 					{
-						System.out.println("You hit a grenade.");
-						p2.removeGrenade();
-						p.addMissedTurn();
-						grid[temp.getRow()][temp.getColumn()].setCalled();
+						if (!grid[temp.getRow()][temp.getColumn()].isCalled())
+						{
+							System.out.println("You hit a grenade.");
+							p2.removeGrenade();
+							p.addMissedTurn();
+							grid[temp.getRow()][temp.getColumn()].setCalled();
+							display();
+							placeRocket(p2,scan);
+						}
+						
 						
 					}
 					
@@ -376,6 +401,11 @@ public class Battleship {
 					System.out.println("Nothing was hit");
 					grid[temp.getRow()][temp.getColumn()].setCalled();
 				}
+			}
+			else
+			{
+				System.out.println("The coordinate you entered is invalid");
+				placeRocket(p1,scan);
 			}
 		}
 	}
@@ -392,16 +422,6 @@ public class Battleship {
 			}
 		}
 	}
-	public void missedTurn(Player player, Player anotherPlayer)
-	{
-		if (player.grenadeHit()==true)
-		{
-			System.out.println("A grenade was hit " + player.getName() + " looses a turn");
-			System.out.println(anotherPlayer.getName() + " has an extra turn");
-			display();
-			placeRocket(anotherPlayer, scan);
-		}
-			
-	}
+	
 	
 }
