@@ -3,41 +3,45 @@ public class Position {
 
 	private boolean ship;
 	private boolean grenade;
+	private boolean called;
 	private int x;
 	private int y;
 	private String owner;
 	
+	
 	public Position(String owner, String coordinate)
 	{
+		called=false;
 		this.owner=owner;
 		switch(coordinate.charAt(0))
 		{
-		case 'A' : x=0;break;
-		case 'B' : x=1;break;
-		case 'C' : x=2;break;
-		case 'D' : x=3;break;
-		case 'E' : x=4;break;
-		case 'F' : x=5;break;
-		case 'G' : x=6;break;
-		case 'H' : x=7;break;
+		case 'A' : y=0;break;
+		case 'B' : y=1;break;
+		case 'C' : y=2;break;
+		case 'D' : y=3;break;
+		case 'E' : y=4;break;
+		case 'F' : y=5;break;
+		case 'G' : y=6;break;
+		case 'H' : y=7;break;
 		}
 		switch(coordinate.charAt(1))
 		{
-		case '1' : y=0;break;
-		case '2' : y=1;break;
-		case '3' : y=2;break;
-		case '4' : y=3;break;
-		case '5' : y=4;break;
-		case '6' : y=5;break;
-		case '7' : y=6;break;
-		case '8' : y=7;break;
+		case '1' : x=0;break;
+		case '2' : x=1;break;
+		case '3' : x=2;break;
+		case '4' : x=3;break;
+		case '5' : x=4;break;
+		case '6' : x=5;break;
+		case '7' : x=6;break;
+		case '8' : x=7;break;
 		}
 	}
-	public Position(String owner, int x , int y)
+	public Position(String owner, int y , int x)
 	{
 		this.owner=owner;
 		this.x=x;
 		this.y=y;
+		called=false;
 	}
 	public int getRow()
 	{
@@ -51,9 +55,18 @@ public class Position {
 	{
 		ship=true;
 	}
+	
 	public boolean getShip()
 	{
 		return ship;
+	}
+	public void setCalled()
+	{
+		called=true;
+	}
+	public boolean isCalled()
+	{
+		return called;
 	}
 	public void setGrenade()
 	{
@@ -62,14 +75,6 @@ public class Position {
 	public boolean getGrenade()
 	{
 		return grenade;
-	}
-	public boolean isWithin(String coordinate)
-	{
-		return (((int)coordinate.charAt(0))-65)>=0 && (((int)coordinate.charAt(0))-65)<=7 && (((int)coordinate.charAt(1))-49)>=0 && (((int)coordinate.charAt(1))-49)<=7;
-	}
-	public boolean isWithin(int x, int y)
-	{
-		return x>=0 && x<=7 && y>=0 && y<=7;
 	}
 	public String getOwner()
 	{
