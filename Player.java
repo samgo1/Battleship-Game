@@ -2,20 +2,10 @@
 public class Player {
 
 	private int missedTurns;
-	private int missedTurnsCtr;
 	private int ships;
 	private int grenades;
 	private String name;
-		public boolean grenadeHit()
-		{
-			if (missedTurns>missedTurnsCtr)
-			{
-				missedTurnsCtr=missedTurns;
-				return true;
-			}
-			else
-				return false;
-		}
+		
 		public void addMissedTurn()
 		{
 			missedTurns++;
